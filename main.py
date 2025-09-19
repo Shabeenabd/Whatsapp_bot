@@ -1,20 +1,31 @@
 from fastapi import FastAPI, Request
-# from twilio
+from twilio.twiml.messaging_response import MessagingResponse
+from fastapi.responses import PlainTextResponse
 
 app = FastAPI()
 
+@app.post("/whatsapp")
+async def whatsapp_reply(Body: str):
+    incoming_msg = Body.lower()
+    resp = MessagingResponse()
+    msg = resp.message()
+    print("body",Body)
+    print(msg)
+
+    if  'hi' in incoming_msg:
+        msg.body("Hi 👋! I’m your AI assistant. How can I help you today?")
+    else:
+        msg.body(f"You said: {Body} \n i say good!!!!!!!")
+    
+    reply = PlainTextResponse(str(resp)) 
+    return reply
+
+
 @app.get("/")
 async def read_root(request : Request):
-    query_params = dict(request.query_params)
-    headers = dict(request.headers)
     client_host = request.client.host
     return {
         "method": request.method,
         "url": str(request.url),
         "client_ip": client_host,
     }
-
-
-@app.post("/webhook")
-async def web_hook(name: str):
-    return f"Hello {name}"
