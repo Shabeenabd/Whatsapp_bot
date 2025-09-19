@@ -5,17 +5,15 @@ from fastapi.responses import PlainTextResponse
 app = FastAPI()
 
 @app.post("/whatsapp")
-async def whatsapp_reply(Body: str):
-    incoming_msg = Body.lower()
+async def whatsapp_reply(Body: str = None):
+    # incoming_msg = Body.lower()
     resp = MessagingResponse()
     msg = resp.message()
-    print("body",Body)
-    print(msg)
-
-    if  'hi' in incoming_msg:
-        msg.body("Hi 👋! I’m your AI assistant. How can I help you today?")
-    else:
-        msg.body(f"You said: {Body} \n i say good!!!!!!!")
+    msg.body("Hi 👋! I’m your AI assistant. How can I help you today?")
+    # if  'hi' in incoming_msg:
+    #     msg.body("Hi 👋! I’m your AI assistant. How can I help you today?")
+    # else:
+    #     msg.body(f"You said: {Body} \n i say good!!!!!!!")
     
     reply = PlainTextResponse(str(resp)) 
     return reply
